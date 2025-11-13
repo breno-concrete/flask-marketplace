@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produtos — BANKA</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script defer src="/static/script.js"></script>
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <div class="brand">
+                <span class="brand-name">BANKA</span>
+            </div>
+            <nav class="nav">
+                <a class="btn btn-ghost" href="/">Início</a>
+                <a class="btn btn-outline" href="/add">Cadastrar</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container produtos-list">
+        <h2>🎪 Conheça Nossos Produtores</h2>
+        <p class="muted">Descubra os melhores produtos frescos e naturais da região</p>
+        <div class="grid" id="products-grid" aria-live="polite"></div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; BANKA — Conectando feiras locais a consumidores que amam qualidade</p>
+        </div>
+    </footer>
+
+    <div id="toast" class="toast" aria-live="polite"></div>
+</body>
+</html>

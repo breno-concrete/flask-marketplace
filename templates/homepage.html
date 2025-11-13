@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BANKA — Feiras Locais Conectadas</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script defer src="/static/script.js"></script>
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <div class="brand">
+                <span class="brand-name">BANKA</span>
+            </div>
+            <nav class="nav">
+                <a class="btn btn-ghost" href="/produtos">Explorar</a>
+                <a class="btn btn-outline" href="/add">Cadastrar</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container hero">
+        <div class="hero-left">
+            <h1 class="hero-title">Do Produtor Direto Para Você</h1>
+            <p class="hero-sub">Conectamos pequenos feirantes e produtores locais diretamente com consumidores que valorizam qualidade, frescor e autenticidade. Descubra os melhores produtos da região.</p>
+            <div class="hero-actions">
+                <a class="btn btn-primary" href="/produtos" onclick="showToast('🎉 Vamos explorar os melhores produtos locais!')">Explorar Produtos</a>
+                <a class="btn btn-secondary" href="/add" onclick="showToast('📝 Cadastro de comércio iniciado!')">Cadastrar Meu Comércio</a>
+            </div>
+        </div>
+        <div class="hero-right">
+            <div class="highlight-card">
+                <h3>🌾 Ofertas em Destaque</h3>
+                <p class="price">R$ <span class="price-value">7,50</span></p>
+                <p class="muted">Produtos frescos e naturais direto da feira</p>
+                <span class="badge premium">Premium Local</span>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; BANKA — Conectando feiras locais a consumidores que amam qualidade</p>
+        </div>
+    </footer>
+
+    <div id="toast" class="toast" aria-live="polite"></div>
+</body>
+</html>
