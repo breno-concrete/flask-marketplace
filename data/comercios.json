@@ -1,11 +1,13 @@
 [
   {
+    "id": 1,
     "nome": "Pães da Dona Lúcia",
     "local": "Centro Urbano Samambaia Sul QR 102",
     "produtos": ["Pão francês", "Pão de batata", "Pão de queijo", "Pão de forma"],
     "horario": "12:00 até 17:30"
   },
   {
+    "id": 2,
     "nome": "Hortifrúti do Baiano",
     "local": "Centro Urbano Samambaia Sul QR 102",
     "produtos": ["Alface", "Tomate", "Banana", "Cebola"],
