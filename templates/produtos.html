@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Produtos — BANKA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/style.css">
     <script defer src="/static/script.js"></script>
 </head>
@@ -21,8 +24,18 @@
     </header>
 
     <main class="container produtos-list">
-        <h2>🎪 Conheça Nossos Produtores</h2>
-        <p class="muted">Descubra os melhores produtos frescos e naturais da região</p>
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap">
+            <div style="flex:1 1 480px; min-width:220px;">
+                <h2>🎪 Conheça Nossos Produtores</h2>
+                <p class="muted">Descubra os melhores produtos frescos e naturais da região</p>
+            </div>
+            <div style="display:flex; align-items:center; gap:0.75rem;">
+                <div class="search-bar">
+                    <input id="search-input" placeholder="Pesquisar produtor ou produto..." />
+                </div>
+                <button id="btn-add-commerce" class="btn btn-primary">➕ Cadastrar Comércio</button>
+            </div>
+        </div>
         <div class="grid" id="products-grid" aria-live="polite"></div>
     </main>
 
