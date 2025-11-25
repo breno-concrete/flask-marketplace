@@ -1,16 +1,26 @@
 [
-  {
-    "id": 1,
-    "nome": "Pães da Dona Lúcia",
-    "local": "Centro Urbano Samambaia Sul QR 102",
-    "produtos": ["Pão francês", "Pão de batata", "Pão de queijo", "Pão de forma"],
-    "horario": "12:00 até 17:30"
-  },
-  {
-    "id": 2,
-    "nome": "Hortifrúti do Baiano",
-    "local": "Centro Urbano Samambaia Sul QR 102",
-    "produtos": ["Alface", "Tomate", "Banana", "Cebola"],
-    "horario": "16:00 até 20:00"
-  }
+    {
+        "id": 1,
+        "nome": "Pães da Dona Cleide",
+        "local": "Centro Urbano Samambaia Sul QR 102",
+        "produtos": [
+            "Pão francês",
+            "Pão de batata",
+            "Pão de queijo",
+            "Pão de forma"
+        ],
+        "horario": "12:00 até 17:30"
+    },
+    {
+        "id": 2,
+        "nome": "Hortifrúti do Baiano",
+        "local": "Centro Urbano Samambaia Sul QR 102",
+        "produtos": [
+            "Alface",
+            "Tomate",
+            "Banana",
+            "Cebola"
+        ],
+        "horario": "16:00 até 20:00"
+    }
 ]

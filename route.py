@@ -1,6 +1,6 @@
 from flask import Flask, render_template, jsonify, request
 import json
-from models.json_store import carregar_dados, salvar_dados, adicionar_comercio, atualizar_comercio
+from models.json_store import carregar_dados, salvar_dados, adicionar_comercio, atualizar_comercio, remover_comercio
 
 app = Flask(__name__)
 
@@ -25,13 +25,31 @@ def get_comercios():
 #CREATE
 @app.route('/api/comercios', methods=['POST'])
 def create_comercio():
-    loja_salva = adicionar_comercio('data/comercios.json', request.json)
-    return jsonify(loja_salva)
+    try:
+        payload = request.get_json(force=True)
+    except Exception:
+        return jsonify({"message": "JSON inválido no corpo da requisição."}), 400
+
+    if not payload or not isinstance(payload, dict) or not payload.get('nome'):
+        return jsonify({"message": "Dados inválidos: 'nome' é obrigatório."}), 400
+
+    try:
+        loja_salva = adicionar_comercio('data/comercios.json', payload)
+        return jsonify(loja_salva), 201
+    except Exception as e:
+        return jsonify({"message": "Erro ao salvar comércio.", "detail": str(e)}), 500
 
 #UPDATE
 @app.route('/api/comercios/<id>', methods= ['PUT'])
 def update_comercio(id):
-    dados_atualizados = request.json
+    try:
+        dados_atualizados = request.get_json(force=True)
+    except Exception:
+        return jsonify({"message": "JSON inválido no corpo da requisição."}), 400
+
+    if not dados_atualizados or not isinstance(dados_atualizados, dict):
+        return jsonify({"message": "Dados inválidos para atualização."}), 400
+
     comercio_atualizado = atualizar_comercio('data/comercios.json', id, dados_atualizados)
     if comercio_atualizado:
         return jsonify(comercio_atualizado)
@@ -49,11 +67,12 @@ def delete_comercio(id):
 
 
 @app.route('/comercios')
+@app.route('/produtos')
 def produtos():
     return render_template("produtos.html")
 
 @app.route('/add')
-def create_comercio():
+def add_page():
     return render_template("add.html")
 
 
