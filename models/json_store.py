@@ -27,7 +27,7 @@ def salvar_dados(pasta, dados):
 
 def adicionar_comercio(pasta, novo_comercio):
     comercios = carregar_dados(pasta)
-    # compute new id safely: ignore entries without numeric id
+    # gera id novo
     ids = []
     for comercio in comercios:
         try:
@@ -41,11 +41,11 @@ def adicionar_comercio(pasta, novo_comercio):
     else:
         new_id = max(ids) + 1
 
-    # Ensure payload is a dict
+    # é dicionário 
     if not isinstance(novo_comercio, dict):
         novo_comercio = {}
 
-    novo_comercio = dict(novo_comercio)
+    novo_comercio = dict(novo_comercio) #cópia do dicionário
     novo_comercio["id"] = new_id #id no novo comércio
     comercios.append(novo_comercio) #coloca na lista de comercios
     salvar_dados(pasta, comercios) #salva na lista atualizada
@@ -71,3 +71,44 @@ def remover_comercio(pasta,id):
             salvar_dados(pasta, comercios)
             return True
     return False
+
+
+# busca usuario pelo email
+def buscar_usuario(pasta, email):
+    usuarios = carregar_dados(pasta)
+
+    for usuario in usuarios:
+        if usuario.get("email") == email:
+            return usuario
+    return None
+
+def validar_senha_user(usuario, senha):
+    if usuario is None:
+        return False
+    return usuario.get("senha") == senha
+
+def add_user(pasta, novo_usuario):
+    usuarios = carregar_dados(pasta)
+
+    ids = []
+    for usuario in usuarios:
+        try:
+            if 'id' in usuarios and isinstance(usuario["id"], int):
+                ids.append(usuario["id"])
+        except Exception:
+            continue
+    
+    if not ids:
+        new_id = 1
+    else:
+        new_id = max(ids) + 1
+
+    if not isinstance(novo_usuario, dict):
+        novo_usuario = {}
+    
+    novo_usuario = dict(novo_usuario)
+    novo_usuario["id"] = new_id
+    usuarios.append(novo_usuario)
+    salvar_dados(pasta, usuarios)
+
+    return novo_usuario

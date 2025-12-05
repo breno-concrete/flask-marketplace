@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard — BANKA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <!-- Header com usuário logado -->
+    <header class="site-header">
+        <div class="container header-inner">
+            <div class="brand">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="1" y="1" width="22" height="22" rx="6" fill="#FFD700" />
+                    <path d="M7 17L11 7L13 12L17 5" stroke="#6B3410" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span class="brand-name">BANKA</span>
+            </div>
+            <nav class="nav nav-dashboard">
+                <div class="user-info">
+                    <span class="user-badge">👤 <span id="userName">Usuário</span></span>
+                </div>
+                <a class="btn btn-outline" href="/add">+ Cadastrar Comércio</a>
+                <button class="btn btn-danger" onclick="logout()">Sair</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container dashboard-section">
+        <!-- Welcome Section -->
+        <div class="welcome-banner">
+            <div class="welcome-content">
+                <h1>Bem-vindo, <span id="userNameBig">Usuário</span>! 👋</h1>
+                <p>Confira os comércios e produtos disponíveis na sua região</p>
+            </div>
+            <div class="welcome-avatar">
+                <div class="avatar-big" id="avatarBig">U</div>
+            </div>
+        </div>
+
+        <!-- Comércios Section -->
+        <section class="comercios-section">
+            <div class="section-header">
+                <h2>🏪 Comércios Locais</h2>
+                <p class="section-subtitle">Descubra os melhores produtores da região</p>
+            </div>
+
+            <div id="comerciosList" class="comercios-grid">
+                <div class="loading">Carregando comércios...</div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2024 BANKA — Feiras Locais Conectadas. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Toast -->
+    <div id="toast" class="toast"></div>
+
+    <script src="/static/auth.js"></script>
+    <script>
+        // Carregar função getLoggedUser imediatamente
+        let pageUser = null;
+
+        // Expor função logout globalmente
+        window.logout = function() {
+            if (confirm('Deseja realmente sair?')) {
+                localStorage.removeItem('banka_user');
+                localStorage.removeItem('banka_login_time');
+                const toast = document.getElementById('toast');
+                if (toast) {
+                    toast.textContent = '✓ Logout realizado';
+                    toast.className = 'toast toast-success active';
+                    setTimeout(() => toast.classList.remove('active'), 2000);
+                }
+                setTimeout(() => { window.location.href = '/'; }, 1500);
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Verificar se usuário está logado
+            pageUser = getLoggedUser();
+            if (!pageUser) {
+                window.location.href = '/login';
+                return;
+            }
+
+            // Preencher dados do usuário
+            const userName = pageUser.nome || 'Usuário';
+            document.getElementById('userName').textContent = userName;
+            document.getElementById('userNameBig').textContent = userName;
+            document.getElementById('avatarBig').textContent = userName.charAt(0).toUpperCase();
+
+            // Carregar comércios UMA VEZ
+            loadComercios();
+        });
+
+        async function loadComercios() {
+            try {
+                const response = await fetch('/api/comercios');
+                const comercios = await response.json();
+
+                const container = document.getElementById('comerciosList');
+                container.innerHTML = '';
+
+                if (!comercios || comercios.length === 0) {
+                    container.innerHTML = '<p class="empty-state">Nenhum comércio cadastrado ainda. Seja o primeiro!</p>';
+                    return;
+                }
+
+                comercios.forEach(comercio => {
+                    const card = document.createElement('div');
+                    card.className = 'comercio-card';
+                    
+                    const logo = comercio.nome.split(' ').map(p => p[0]).join('').toUpperCase().slice(0, 2);
+                    
+                    card.innerHTML = `
+                        <div class="comercio-logo">${logo}</div>
+                        <h3>${comercio.nome}</h3>
+                        <p class="comercio-local">📍 ${comercio.local}</p>
+                        <p class="comercio-horario">🕐 ${comercio.horario || 'Horário não informado'}</p>
+                        <div class="comercio-produtos">
+                            <strong>Produtos:</strong>
+                            <p class="produtos-texto">${(comercio.produtos || []).join(', ')}</p>
+                        </div>
+                    `;
+                    
+                    container.appendChild(card);
+                });
+            } catch (error) {
+                console.error('Erro ao carregar comércios:', error);
+                document.getElementById('comerciosList').innerHTML = '<p class="error">Erro ao carregar comércios</p>';
+            }
+        }
+
+        function showToast(message, type = 'default') {
+            const toast = document.getElementById('toast');
+            if (!toast) return;
+            toast.textContent = message;
+            toast.className = `toast toast-${type} active`;
+            setTimeout(() => toast.classList.remove('active'), 3000);
+        }
+    </script>
+</body>
+</html>

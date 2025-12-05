@@ -1,7 +1,10 @@
 from flask import Flask, render_template, jsonify, request
 import json
-from models.json_store import carregar_dados, salvar_dados, adicionar_comercio, atualizar_comercio, remover_comercio
-
+from models.json_store import (
+    carregar_dados, salvar_dados, adicionar_comercio, 
+    atualizar_comercio, remover_comercio,
+    buscar_usuario, validar_senha_user, add_user
+)
 app = Flask(__name__)
 
 #home do site
@@ -74,6 +77,72 @@ def produtos():
 @app.route('/add')
 def add_page():
     return render_template("add.html")
+
+
+
+
+
+
+#------------------------------------------ROTAS de LOGIN e SIGNUP------------------------------------------
+@app.route('/api/login', methods=['POST'])
+def login_user():
+    try:
+        dados = request.get_json(force=True)
+    except Exception:
+        return jsonify({"message": "JSON inválido no corpo da requisição."}), 400
+    email = dados.get('email')
+    senha = dados.get('senha') 
+
+    #valida se campo foi prenchido
+    if not email or not senha:
+        return jsonify({"message": "Email e senha são obrigatórios."}), 400
+    
+    usuario = buscar_usuario('data/usuarios.json', email) #acha o user
+
+    if validar_senha_user(usuario, senha): #valida senha e retorna dicionário das infos do usuario
+        return jsonify({
+            "id": usuario['id'],
+            "email": usuario['email'],
+            "nome": usuario['nome']
+        }), 200
+
+    return jsonify({"message": "Email ou senha incorretos."}), 401 #retona erro caso a senha ou email estejam errados
+
+@app.route('/api/signup', methods=['POST'])
+def register():
+    try:
+        dados = request.get_json(force=True)
+    except Exception:
+        return jsonify({"message": "JSON inválido."}), 400
+
+    nome = dados.get('nome')
+    email = dados.get('email')
+    senha = dados.get('senha')
+
+    if not nome or not email or not senha:
+        return jsonify({"message": "Nome, email e senha são obrigatórios."}), 400
+        
+    usuario_existente = buscar_usuario('data/usuarios.json', email)
+    if usuario_existente:
+        return jsonify({"message": "Já existe um usuário com este email."}), 409
+
+    novo_usuario = {
+        "nome": nome,
+        "email": email,
+        "senha": senha
+    }
+
+    usuario_criado = add_user('data/usuarios.json', novo_usuario)
+    return jsonify(usuario_criado), 201
+
+@app.route('/login')
+def login():
+    return render_template("login.html")
+
+@app.route('/perfil')
+def perfil_page():
+    return render_template("perfil.html")
+
 
 
 #ver edição enquanto modifica o código
