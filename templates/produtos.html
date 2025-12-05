@@ -23,20 +23,27 @@
         </div>
     </header>
 
-    <main class="container produtos-list">
-        <div style="display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap">
-            <div style="flex:1 1 480px; min-width:220px;">
-                <h2>🎪 Conheça Nossos Produtores</h2>
-                <p class="muted">Descubra os melhores produtos frescos e naturais da região</p>
+    <main class="container">
+        <!-- Section Header -->
+        <section class="produtos-header">
+            <div class="header-content">
+                <h1>🎪 Conheça Nossos Produtores</h1>
+                <p class="header-subtitle">Descubra os melhores produtos frescos e naturais da região</p>
             </div>
-            <div style="display:flex; align-items:center; gap:0.75rem;">
-                <div class="search-bar">
-                    <input id="search-input" placeholder="Pesquisar produtor ou produto..." />
-                </div>
-                <button id="btn-add-commerce" class="btn btn-primary">➕ Cadastrar Comércio</button>
+        </section>
+
+        <!-- Search and Filter -->
+        <section class="search-section">
+            <div class="search-bar">
+                <input id="search-input" placeholder="🔍 Pesquisar produtor ou produto..." />
             </div>
+            <a href="/add" class="btn btn-primary">➕ Cadastrar Comércio</a>
+        </section>
+
+        <!-- Grid de Produtos -->
+        <div class="grid" id="products-grid" aria-live="polite">
+            <div class="loading">Carregando produtores...</div>
         </div>
-        <div class="grid" id="products-grid" aria-live="polite"></div>
     </main>
 
     <footer class="site-footer">

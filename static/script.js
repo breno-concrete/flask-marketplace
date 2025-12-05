@@ -315,3 +315,55 @@
     });
 
 })();
+
+/* ============================================
+   PROTEÇÃO DE PÁGINAS - VERIFICAÇÃO LOGIN
+   ============================================ */
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Páginas que precisam de login
+    const paginasProtegidas = ['/produtos', '/add'];
+    const paginaAtual = window.location.pathname;
+    
+    // Se está em página protegida E não está logado
+    if (paginasProtegidas.some(rota => paginaAtual === rota)) {
+        const user = localStorage.getItem('banka_user');
+        if (!user) {
+            window.location.href = '/login';
+        }
+    }
+
+    // Atualizar header da homepage se usuário estiver logado
+    if (paginaAtual === '/') {
+        const user = JSON.parse(localStorage.getItem('banka_user') || 'null');
+        if (user) {
+            const nav = document.querySelector('.nav');
+            if (nav) {
+                nav.innerHTML = `
+                    <span class="user-badge-nav">👤 ${user.nome}</span>
+                    <a class="btn btn-ghost" href="/perfil">Meu Painel</a>
+                    <button class="btn btn-outline" onclick="logoutHomepage()">Sair</button>
+                `;
+            }
+        } else {
+            // Se não está logado, adicionar botão de login
+            const nav = document.querySelector('.nav');
+            if (nav) {
+                const loginBtn = document.createElement('a');
+                loginBtn.href = '/login';
+                loginBtn.className = 'btn btn-primary';
+                loginBtn.textContent = 'Entrar';
+                nav.appendChild(loginBtn);
+            }
+        }
+    }
+});
+
+// Função de logout acessível globalmente
+window.logoutHomepage = function() {
+    if (confirm('Deseja realmente sair?')) {
+        localStorage.removeItem('banka_user');
+        localStorage.removeItem('banka_login_time');
+        window.location.href = '/';
+    }
+}
